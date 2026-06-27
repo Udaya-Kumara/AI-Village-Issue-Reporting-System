@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Village Issue Reporting System</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body style="
+background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');
+background-size: cover;
+background-position: center;
+">
+
+<!-- 🔷 Navbar -->
+<nav class="navbar navbar-dark bg-primary shadow">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">
+            <i class="bi bi-geo-alt-fill"></i> Village Issue Reporting System
+        </span>
+    </div>
+</nav>
+
+<!-- 🔷 Main Container -->
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- 🔷 Card -->
+            <div class="card shadow-lg p-4 rounded-4" style="background-color: rgba(255, 255, 255, 0.97);">
+
+                <h3 class="text-center mb-4 text-primary">
+                    Submit Your Complaint
+                </h3>
+
+                <!-- 🔷 FORM -->
+                <form method="POST" action="/predict" enctype="multipart/form-data">
+
+                    <!-- Language -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Language</label>
+                        <select id="language" class="form-control" name="language" required>
+                            <option value="en">English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="kn">Kannada</option>
+                        </select>
+                    </div>
+
+                    <!-- Complaint -->
+                    <div class="mb-3">
+                        <label class="form-label">Complaint</label>
+
+                        <textarea id="complaint" class="form-control" name="complaint" rows="4"
+                            placeholder="Enter your complaint..." required></textarea>
+
+                        <!-- 🎤 Voice Button -->
+                        <button type="button" class="btn btn-secondary mt-2" onclick="startVoice()">
+                            🎤 Speak Complaint
+                        </button>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="Enter location" required>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="mb-3">
+                        <label class="form-label">Upload Image (Optional)</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-send"></i> Submit a Complaint
+                        </button>
+                    </div>
+
+                </form>
+
+                <!-- 🚨 Emergency Button (OUTSIDE FORM) -->
+                <div class="text-center mt-3">
+                    <button class="btn btn-danger px-4" onclick="showEmergencyAlert()">
+                        🚨 Emergency Alert
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 🔊 Emergency Alert -->
+<script>
+function showEmergencyAlert() {
+    alert("🚨 Emergency Alert Sent to Admin!");
+}
+</script>
+
+<!-- 🎤 Voice Recognition -->
+<script>
+function startVoice() {
+
+    if (!('webkitSpeechRecognition' in window)) {
+        alert("Use Google Chrome for voice feature");
+        return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+
+    // Get selected language
+    var lang = document.getElementById("language").value;
+
+    // Set language properly
+    switch(lang) {
+        case "hi":
+            recognition.lang = "hi-IN"; // Hindi
+            break;
+
+        case "kn":
+            recognition.lang = "kn-IN"; // Kannada
+            break;
+
+        default:
+            recognition.lang = "en-IN"; // English
+    }
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.start();
+
+    recognition.onstart = function () {
+        alert("🎤 Speak in selected language...");
+    };
+
+    recognition.onresult = function(event) {
+        const speechText = event.results[0][0].transcript;
+
+        // Append instead of replace (better UX)
+        document.getElementById("complaint").value += " " + speechText;
+    };
+
+    recognition.onerror = function(event) {
+        alert("Error: " + event.error);
+    };
+}
+</script>
+
+</body>
+</html>

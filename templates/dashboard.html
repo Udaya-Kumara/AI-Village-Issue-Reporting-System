@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f9; }
+        .container { width:80%; margin:auto; margin-top:40px; }
+        .card {
+            display:inline-block;
+            width:30%;
+            padding:20px;
+            margin:10px;
+            border-radius:10px;
+            color:white;
+            text-align:center;
+            font-size:20px;
+        }
+        .total { background:#007bff; }
+        .pending { background:#ffc107; }
+        .resolved { background:#28a745; }
+        table {
+            width:100%;
+            margin-top:30px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:center;
+        }
+        th { background:#343a40; color:white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📊 Complaint Dashboard</h2>
+
+    <div class="card total">
+        Total Complaints<br>
+        {{ total }}
+    </div>
+
+    <div class="card pending">
+        Pending Complaints<br>
+        {{ pending }}
+    </div>
+
+    <div class="card resolved">
+        Resolved Complaints<br>
+        {{ resolved }}
+    </div>
+
+    <h3>Category-wise Report</h3>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Count</th>
+        </tr>
+        {% for row in category_data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/admin">⬅ Back to Admin Panel</a>
+</div>
+
+</body>
+</html>
